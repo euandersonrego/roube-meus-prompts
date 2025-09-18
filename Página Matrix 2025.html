@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roube os Meus Prompts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --matrix-green: #00FF41;
+            --terminal-bg: rgba(10, 25, 10, 0.2);
+            --terminal-border: rgba(0, 255, 65, 0.3);
+            --font-main: 'Share Tech Mono', monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--matrix-green);
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* O Canvas para o efeito Matrix irá aqui */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+            background: var(--terminal-bg);
+            border: 1px solid var(--terminal-border);
+            border-radius: 15px;
+            padding: 32px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.15);
+            animation: flicker 10s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
+        }
+
+        .title {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            line-height: 1.1;
+            margin: 0 0 16px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--matrix-green);
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: #b0ffc3;
+            margin: 0 0 48px 0;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: typing 4s steps(40, end);
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: .15em solid var(--matrix-green);
+        }
+        
+        @keyframes typing {
+          from { width: 0 }
+          to { width: 100% }
+        }
+
+        .link-button {
+            background: transparent;
+            color: var(--matrix-green);
+            border: 2px solid var(--matrix-green);
+            text-decoration: none;
+            padding: 18px 36px;
+            border-radius: 8px;
+            font-size: clamp(1rem, 4.5vw, 1.2rem);
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+            text-shadow: 0 0 5px var(--matrix-green);
+            box-shadow: 0 0 15px 0px rgba(0,255,65,0.5);
+        }
+
+        .link-button:hover {
+            background-color: var(--matrix-green);
+            color: var(--bg-color);
+            box-shadow: 0 0 25px 5px rgba(0,255,65,0.7);
+            text-shadow: none;
+        }
+        
+        .footer { 
+            margin-top: 48px; 
+            color: rgba(0, 255, 65, 0.4);
+            font-size: 0.875rem;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="container">
+        
+        <h1 class="title">&gt; ROUBE OS MEUS PROMPTS_</h1>
+        <p class="subtitle">Conectando à fonte... Acesso garantido.</p>
+
+        <!-- 
+        ================================================================
+        == ÁREA DO LINK ÚNICO ==
+        ================================================================
+        -->
+        <div>
+            <!-- 
+            INSTRUÇÕES:
+            Substitua "SEU_UNICO_LINK_DIRETO_AQUI" pelo seu link de download direto do Google Drive.
+            -->
+            <a href="SEU_UNICO_LINK_DIRETO_AQUI" target="_blank" class="link-button">
+                [ INICIAR DOWNLOAD ]
+            </a>
+        </div>
+
+        <footer class="footer">
+            <!-- ATUALIZADO CONFORME SOLICITADO -->
+            <p>&copy; 2025 // Anderson Rêgo</p>
+        </footer>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ajusta o canvas para o tamanho da tela
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Caracteres que irão "chover"
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const alphabet = katakana + latin + nums;
+
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+
+        // Array para guardar a posição Y de cada gota em cada coluna
+        const rainDrops = [];
+        for (let i = 0; i < columns; i++) {
+            rainDrops[i] = 1;
+        }
+
+        const draw = () => {
+            // Fundo semi-transparente para criar o efeito de rastro
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--matrix-green').trim();
+            ctx.font = fontSize + 'px monospace';
+
+            // Loop através das colunas
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                // Reset aleatório para o topo para um efeito mais dinâmico
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+
+        setInterval(draw, 30);
+
+        // Responsividade: ajusta o canvas se a janela for redimensionada
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Recalcula o número de colunas
+            const newColumns = Math.floor(canvas.width / fontSize);
+            // Ajusta o array de gotas para o novo número de colunas
+            while(rainDrops.length < newColumns) {
+                rainDrops.push(1);
+            }
+            rainDrops.length = newColumns;
+        });
+
+    </script>
+</body>
+</html>
+
