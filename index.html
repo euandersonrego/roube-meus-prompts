@@ -115,9 +115,41 @@
             text-shadow: none;
         }
 
-        /* Classe para espaçamento entre botões */
+        /* Classe para espaçamento entre botões normais */
         .button-wrapper {
             margin-bottom: 24px;
+        }
+
+        /* ESTILOS DO BOTÃO SECRETO (NOVO - CANTO) */
+        .secret-btn-fixed {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #FFD700; /* Amarelo */
+            color: #000000;
+            padding: 10px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+            z-index: 100;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse-yellow 1.5s infinite;
+            border: 1px solid #000;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            font-family: var(--font-main);
+        }
+
+        .secret-btn-fixed:hover {
+            transform: scale(1.1);
+            background-color: #ffe44d;
+        }
+
+        @keyframes pulse-yellow {
+            0% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 215, 0, 0.9); }
+            100% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
         }
         
         .footer { 
@@ -131,6 +163,11 @@
 <body>
 
     <canvas id="matrix-canvas"></canvas>
+
+    <!-- Botão Secreto Fixo -->
+    <a href="https://shortsmilionarios.kpages.online/heroi-interativo" target="_blank" class="secret-btn-fixed">
+        MÉTODO SECRETO
+    </a>
 
     <div class="container">
         
