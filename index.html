@@ -16,6 +16,22 @@
             --font-main: 'Share Tech Mono', monospace;
         }
 
+        /* Scrollbar customizada estilo Matrix */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--matrix-green); 
+            border-radius: 5px;
+            border: 2px solid #000;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00cc33; 
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--matrix-green);
@@ -24,10 +40,12 @@
             padding: 24px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            /* Ajuste para responsividade: permite rolagem e evita cortes em telas pequenas */
+            align-items: flex-start; 
             min-height: 100vh;
             box-sizing: border-box;
-            overflow: hidden;
+            overflow-y: auto; /* Permite rolagem vertical */
+            overflow-x: hidden;
         }
 
         /* O Canvas para o efeito Matrix irá aqui */
@@ -52,6 +70,7 @@
             -webkit-backdrop-filter: blur(8px);
             box-shadow: 0 0 25px rgba(0, 255, 65, 0.15);
             animation: flicker 10s infinite;
+            margin: auto; /* Centraliza verticalmente se houver espaço */
         }
 
         @keyframes flicker {
@@ -194,6 +213,12 @@
         <div class="button-wrapper">
             <a href="https://drive.google.com/file/d/18N3RIeZVWYPOjypSNXu4tMCU2wMBLXq7/view?usp=sharing" target="_blank" class="link-button">
                 [ Prompts para Vídeos de Bastidores ]
+            </a>
+        </div>
+
+        <div class="button-wrapper">
+            <a href="https://drive.google.com/file/d/1vbOgYr402SMlo9fuUmro5YZ6aUAklNfD/view?usp=sharing" target="_blank" class="link-button">
+                [ PROMPT BASTIDORES DE SHOW K-POP ]
             </a>
         </div>
 
