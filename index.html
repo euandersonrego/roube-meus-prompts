@@ -11,7 +11,7 @@
         :root {
             --bg-color: #000000;
             --matrix-green: #00FF41;
-            --terminal-bg: rgba(10, 25, 10, 0.2);
+            --terminal-bg: rgba(10, 25, 10, 0.4); /* Levemente mais opaco para legibilidade em mobile */
             --terminal-border: rgba(0, 255, 65, 0.3);
             --font-main: 'Share Tech Mono', monospace;
         }
@@ -40,11 +40,10 @@
             padding: 24px;
             display: flex;
             justify-content: center;
-            /* Ajuste para responsividade: permite rolagem e evita cortes em telas pequenas */
-            align-items: flex-start; 
+            align-items: flex-start; /* Melhor para scroll em mobile */
             min-height: 100vh;
             box-sizing: border-box;
-            overflow-y: auto; /* Permite rolagem vertical */
+            overflow-y: auto;
             overflow-x: hidden;
         }
 
@@ -70,7 +69,9 @@
             -webkit-backdrop-filter: blur(8px);
             box-shadow: 0 0 25px rgba(0, 255, 65, 0.15);
             animation: flicker 10s infinite;
-            margin: auto; /* Centraliza verticalmente se houver espaço */
+            margin: auto; 
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes flicker {
@@ -79,15 +80,16 @@
         }
 
         .title {
-            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-size: clamp(1.5rem, 5vw, 3rem); /* Reduzido levemente */
             line-height: 1.1;
             margin: 0 0 16px 0;
             letter-spacing: 2px;
             text-shadow: 0 0 10px var(--matrix-green);
+            word-wrap: break-word; /* Quebra palavra se for muito longa no mobile */
         }
 
         .subtitle {
-            font-size: clamp(1rem, 4vw, 1.25rem);
+            font-size: clamp(0.85rem, 3vw, 1.15rem); /* Reduzido levemente */
             color: #b0ffc3;
             margin: 0 0 48px 0;
             max-width: 450px;
@@ -104,27 +106,35 @@
           to { width: 100% }
         }
 
+        /* Ajuste de animação typing para mobile (remove o efeito se a tela for muito estreita para evitar quebra) */
+        @media (max-width: 400px) {
+            .subtitle {
+                white-space: normal;
+                border-right: none;
+                animation: none;
+            }
+        }
+
         .link-button {
             background: transparent;
             color: var(--matrix-green);
             border: 2px solid var(--matrix-green);
             text-decoration: none;
-            padding: 18px 36px;
+            padding: 18px 24px; /* Padding lateral reduzido levemente para telas estreitas */
             border-radius: 8px;
-            font-size: clamp(1rem, 4.5vw, 1.2rem);
+            font-size: clamp(0.85rem, 3.5vw, 1.1rem); /* Reduzido levemente */
             display: inline-block;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
             text-shadow: 0 0 5px var(--matrix-green);
             box-shadow: 0 0 15px 0px rgba(0,255,65,0.5);
-            width: 100%; /* Botões ocupam largura total disponível no mobile */
-            max-width: 400px; /* Limite de largura para desktop */
+            width: 100%;
+            max-width: 450px; /* Aumentei um pouco para caber textos longos */
             box-sizing: border-box;
-            
-            /* Garante que o texto quebre se for muito longo no mobile */
             white-space: normal; 
             line-height: 1.4;
+            word-wrap: break-word; /* Garante que links/textos longos não estouram */
         }
 
         .link-button:hover {
@@ -134,9 +144,9 @@
             text-shadow: none;
         }
 
-        /* Classe para espaçamento entre botões normais */
         .button-wrapper {
             margin-bottom: 24px;
+            padding: 0 10px; /* Garante margem interna em telas pequenas */
         }
 
         /* ESTILOS DO BOTÃO SECRETO (NOVO - CANTO) */
@@ -144,7 +154,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #FFD700; /* Amarelo */
+            background-color: #FFD700;
             color: #000000;
             padding: 10px 15px;
             border-radius: 4px;
@@ -175,6 +185,28 @@
             margin-top: 48px; 
             color: rgba(0, 255, 65, 0.4);
             font-size: 0.875rem;
+            padding-bottom: 20px; /* Espaço extra no final */
+        }
+
+        /* --- MEDIA QUERIES PARA RESPONSIVIDADE AVANÇADA --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+            .container {
+                padding: 24px 12px;
+                margin-top: 20px;
+                margin-bottom: 80px; /* Espaço extra para o botão fixo não cobrir o rodapé */
+            }
+            .secret-btn-fixed {
+                bottom: 15px;
+                right: 15px;
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+            .title {
+                margin-bottom: 24px;
+            }
         }
         
     </style>
@@ -219,6 +251,13 @@
         <div class="button-wrapper">
             <a href="https://drive.google.com/file/d/1vbOgYr402SMlo9fuUmro5YZ6aUAklNfD/view?usp=sharing" target="_blank" class="link-button">
                 [ PROMPT BASTIDORES DE SHOW K-POP ]
+            </a>
+        </div>
+
+        <!-- NOVO LINK ADICIONADO -->
+        <div class="button-wrapper">
+            <a href="https://drive.google.com/file/d/1IZCQfgZgoLeyQL_OKjNkZ8NJb-8Gqbh1/view?usp=sharing" target="_blank" class="link-button">
+                [ PROMPT TURMA DO CHAVES ]
             </a>
         </div>
 
@@ -271,19 +310,25 @@
             }
         };
 
-        setInterval(draw, 30);
+        const interval = setInterval(draw, 30);
 
         // Responsividade: ajusta o canvas se a janela for redimensionada
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            
             // Recalcula o número de colunas
             const newColumns = Math.floor(canvas.width / fontSize);
-            // Ajusta o array de gotas para o novo número de colunas
-            while(rainDrops.length < newColumns) {
-                rainDrops.push(1);
+            
+            // Ajusta o array de gotas preservando as existentes onde possível
+            // para evitar "limpar" a tela inteira abruptamente
+            if (newColumns > rainDrops.length) {
+                for (let i = rainDrops.length; i < newColumns; i++) {
+                    rainDrops[i] = Math.random() * canvas.height / fontSize; // Começa em posições aleatórias
+                }
+            } else {
+                rainDrops.length = newColumns;
             }
-            rainDrops.length = newColumns;
         });
 
     </script>
